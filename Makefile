@@ -1,6 +1,6 @@
 PROJECT=prometheus-pingdom-exporter
 
-GOVERSION=1.15
+GOVERSION=1.16
 
 BIN := $(PROJECT)
 
@@ -37,8 +37,8 @@ clean:
 	rm -rf $(BIN) bin-dist/ build/
 
 $(BIN): $(SOURCE) VERSION
-	CGO_ENABLED=0
-	
+	CGO_ENABLED=
+
 	@echo Building inside Docker container for $(GOOS)/$(GOARCH)
 	docker run \
 	    --rm \
@@ -53,10 +53,10 @@ $(BIN): $(SOURCE) VERSION
 
 ci-build: $(SOURCE) VERSION
 	CGO_ENABLED=0
-	
+
 	@echo Building for $(GOOS)/$(GOARCH)
 	GO111MODULE=on $(BUILD_COMMAND)
-	
+
 docker-image: $(BIN)
 	docker build -t giantswarm/$(PROJECT):$(VERSION) .
 
